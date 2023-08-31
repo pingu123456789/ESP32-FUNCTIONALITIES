@@ -1,0 +1,35 @@
+B.2.2.18. GPIO pin configuration
+// define the LED pin
+Define ledPin as 2
+
+// setup function
+Procedure setup()
+    // Sets the digital pin as output
+    pinMode(ledPin, OUTPUT)
+EndProcedure
+
+// main program loop
+Procedure loop()
+    // Turns the LED on
+    digitalWrite(ledPin, HIGH)
+
+    // Waits for a second
+    delay(1000)
+
+    // Turns the LED off
+    digitalWrite(ledPin, LOW)
+
+    // Waits for a second
+    delay(1000)
+EndProcedure
+
+// main function
+Procedure main()
+    // Call setup procedure
+    setup()
+
+    // Start main program loop
+    while true do
+        loop()
+    end
+EndProcedure

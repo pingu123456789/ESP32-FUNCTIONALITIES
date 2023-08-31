@@ -1,0 +1,150 @@
+C.3.3.1. SMSE method: Method 1.1
+define Adafruit_SCD30 as scd30, DHT as dht(32, DHT22)
+
+set Q = 0.01, R = 2, P = Q, X, K, previous_reference_humidity = 0
+
+define setup():
+  start Serial at 115200 baud
+  loop until Serial is ready with delay(10)
+  loop until scd30 begins with delay(10)
+  initialize scd30 measurement interval and dht
+  delay(1000)
+
+  if scd30 data is ready:
+    read scd30 and set previous_reference_humidity and X to scd30 temperature
+
+define loop():
+  if scd30 data is ready:
+    read scd30
+    define low_cost_humidity as dht temperature
+    define reference_humidity as scd30 temperature
+
+    generate gaussian_random using U1, U2 with random(0, 32767) / 32767
+
+    if previous_reference_humidity != reference_humidity:
+      calculate u and add to X
+      increment P by Q
+
+    if loop step % 10 equals 0:
+      calculate z as low_cost_humidity plus gaussian_random times R
+      calculate y as z minus X, and K as P / (P + R)
+      calculate X as X plus K times y, and P as (1 - K) times P
+
+    set previous_reference_humidity to reference_humidity
+
+    print "Reference Humidity: ", reference_humidity, 
+          "Low Cost Humidity: ", low_cost_humidity, 
+          "Estimated Humidity: ", X
+    delay(1000)
+
+C.3.3.2. MMSE method: Method 1.2
+Define Adafruit_SCD30 as SCD30
+Define DHTTYPE as DHT22
+Define DHTPins as {32, 33, 34, 35}
+Define DHTs as Array of DHT objects with DHTPins
+
+Set Q = 0.01, R = 0.004, P = Q, X, K, PreviousReferenceHumidity = 0.0
+
+Define WindowSize = 10
+Define SensorValues as Array of Arrays of size WindowSize
+
+Function setup():
+  Start Serial at 115200 baud
+  While Serial not ready, Wait for 10ms
+
+  If SCD30 not ready, Wait indefinitely with delay(10ms)
+  Initialize SCD30 and all DHT sensors
+  Wait for 1000ms
+
+  If SCD30 data is ready:
+    Read SCD30 and Set PreviousReferenceHumidity and X to SCD30 temperature
+
+Function variance(values):
+  Calculate and return variance of values
+
+Function loop():
+  If SCD30 data is ready:
+    Read SCD30
+    Shift values left in SensorValues arrays
+    Read new sensor values and store in SensorValues arrays
+
+    Calculate variance for each SensorValues array
+    Calculate weights based on inverse of variances
+    Normalize weights
+    Calculate FusedHumidity using weights and SensorValues
+
+    Generate GaussianRandom using U1, U2 with random(0, 32767) / 32767
+
+    If PreviousReferenceHumidity != ReferenceHumidity:
+      Calculate u and Add to X
+      Increment P by Q
+
+    If loop count mod 10 equals 0:
+      Calculate z as FusedHumidity plus GaussianRandom times R
+      Calculate y as z minus X, K as P / (P + R)
+      Calculate X as X plus K times y, P as (1 - K) times P
+
+    Set PreviousReferenceHumidity to ReferenceHumidity
+
+    Print "Reference Humidity: ", ReferenceHumidity,
+          "Fused Humidity: ", FusedHumidity,
+          "Estimated Humidity: ", X
+
+    Wait for 1000ms
+
+C.3.3.3. MMSE method: Method 1.3
+Define Adafruit_SCD30 as SCD30
+Define DHTTYPE as DHT22
+Define DHTPins as {32, 33, 34, 35}
+Define DHTs as Array of DHT objects with DHTPins
+
+Set Q = 0.01, R = 0.004, P = Q, X, K, PreviousReferenceHumidity = 0.0
+
+Define WindowSize = 10
+Define SensorValues as Array of Arrays of size WindowSize
+Define ReferenceValues as Array of size WindowSize
+
+Function setup():
+  Start Serial at 115200 baud
+  While Serial not ready, Wait for 10ms
+
+  If SCD30 not ready, Wait indefinitely with delay(10ms)
+  Initialize SCD30 and all DHT sensors
+  Wait for 1000ms
+
+  If SCD30 data is ready:
+    Read SCD30 and Set PreviousReferenceHumidity and X to SCD30 temperature
+
+Function variance(values):
+  Calculate and return variance of values
+
+Function loop():
+  If SCD30 data is ready:
+    Read SCD30
+    Shift values left in SensorValues arrays and ReferenceValues array
+    Read new sensor values and store in SensorValues arrays
+    Store SCD30 temperature in ReferenceValues array
+
+    Calculate variance for each SensorValues array and ReferenceValues array
+    Calculate weights based on inverse of variances
+    Normalize weights
+    Calculate FusedHumidity using weights and SensorValues, and ReferenceValues
+
+    Generate GaussianRandom using U1, U2 with random(0, 32767) / 32767
+
+    If PreviousReferenceHumidity != ReferenceHumidity:
+      Calculate u and Add to X
+      Increment P by Q
+
+    If loop count mod 10 equals 0:
+      Calculate z as FusedHumidity plus GaussianRandom times R
+      Calculate y as z minus X, K as P / (P + R)
+      Calculate X as X plus K times y, P as (1 - K) times P
+
+    Set PreviousReferenceHumidity to ReferenceHumidity
+
+    Print "Reference Humidity: ", ReferenceHumidity,
+          "Fused Humidity: ", FusedHumidity,
+          "Estimated Humidity: ", X
+
+    Wait for 1000ms

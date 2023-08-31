@@ -1,0 +1,42 @@
+B.2.2.12. Priority based scheduling
+Include FreeRTOS library
+
+Define TASK1_PRIORITY as 3
+Define TASK2_PRIORITY as 2
+Define TASK3_PRIORITY as 1
+
+Define lastTask1Time, lastTask2Time, lastTask3Time as 0
+
+Procedure setup() // this procedure runs once when the system starts
+    Create Task1 with priority TASK1_PRIORITY
+    Create Task2 with priority TASK2_PRIORITY
+    Create Task3 with priority TASK3_PRIORITY
+EndProcedure
+
+Procedure loop() // this procedure runs repeatedly
+    If the current time - lastTask1Time >= the time slice for Task1
+        Call Task1() and update lastTask1Time to the current time
+    EndIf
+    
+    If the current time - lastTask2Time >= the time slice for Task2
+        Call Task2() and update lastTask2Time to the current time
+    EndIf
+    
+    If the current time - lastTask3Time >= the time slice for Task3
+        Call Task3() and update lastTask3Time to the current time
+    EndIf
+EndProcedure
+
+Procedure Task1()
+    // Task 1 implementation
+EndProcedure
+
+Procedure Task2()
+    // Task 2 implementation
+EndProcedure
+
+Procedure Task3()
+    // Task 3 implementation
+EndProcedure
+
+}

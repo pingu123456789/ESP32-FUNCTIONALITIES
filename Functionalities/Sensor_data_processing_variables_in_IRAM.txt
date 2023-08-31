@@ -1,0 +1,9 @@
+B.2.2 Software design components
+B.2.2.1. Sensor data processing variables
+float IRAM_ATTR temp_avg;
+float IRAM_ATTR hum_avg;
+float IRAM_ATTR gas_avg;
+
+
+
+

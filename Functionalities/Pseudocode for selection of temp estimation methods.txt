@@ -1,0 +1,26 @@
+B.2.2.10. Pseudocode for implementing method 1 or method 2 based on user configuration towards temperature estimation
+
+Program Begin
+Initialize state matrices and parameters for both methods
+
+Loop Forever:
+    Read temperature data from all sensors
+    Store sensor readings in respective sensor data arrays
+    
+    If the number of sensor readings reaches WINDOW_SIZE then
+        Use Method 1 (Multidimensional Kalman Filter) on the sensor readings:
+            Perform Time Update
+            Perform Measurement Update
+        Print results and memory usage of Method 1
+
+        Use Method 2 (Inferring Regression Parameters and Kalman Filtering) on the sensor readings:
+            Perform Time Update
+            Perform Measurement Update
+        Print results and memory usage of Method 2
+
+        Clear sensor data arrays
+
+    Delay for some time
+Loop End
+
+Program End

@@ -1,0 +1,38 @@
+B.2.2.17. ADC reading
+// define the ADC pin
+Define ADC_PIN as 34
+
+// setup function
+Procedure setup()
+    // Initialize serial communication with baud rate of 115200
+    Serial.begin(115200)
+
+    // Set ADC resolution to 12 bits
+    analogReadResolution(12)
+
+    // Set ADC attenuation to 11db
+    analogSetAttenuation(ADC_11db)
+EndProcedure
+
+// main program loop
+Procedure loop()
+    // Read the ADC value
+    Define adc_value as analogRead(ADC_PIN)
+
+    // Print the ADC value to the serial monitor
+    Serial.println(adc_value)
+
+    // Wait for 1 second
+    delay(1000)
+EndProcedure
+
+// main function
+Procedure main()
+    // Call setup procedure
+    setup()
+
+    // Start main program loop
+    while true do
+        loop()
+    end
+EndProcedure

@@ -1,0 +1,75 @@
+B.2.2.15. I2C configuration
+
+E.5.15.1. When there is a single device on the I2C bus
+// include I2C library
+Include <Wire.h>
+
+// define I2C SDA and SCL pins
+Define SDA_PIN as 21
+Define SCL_PIN as 22
+
+// setup function
+Procedure setup()
+    // Initialize I2C communication as Master
+    Wire.begin(SDA_PIN, SCL_PIN)
+EndProcedure
+
+// main program loop
+Procedure loop()
+    // Place your code here
+    // This code will be continuously run after setup() is complete
+EndProcedure
+
+// main function
+Procedure main()
+    // Call setup procedure
+    setup()
+
+    // Start main program loop
+    while true do
+        loop()
+    end
+EndProcedure
+
+
+B.2.2.15.2. When there are multiple devices on the I2C bus
+// include I2C library
+Include <Wire.h>
+
+// define I2C SDA and SCL pins
+Define SDA_PIN as 21
+Define SCL_PIN as 22
+
+// setup function
+Procedure setup()
+    // Initialize I2C communication as Master
+    Wire.begin(SDA_PIN, SCL_PIN)
+EndProcedure
+
+// main program loop
+Procedure loop()
+    // Start transmission with device at address 0x50
+    Wire.beginTransmission(0x50)
+    // Send "Hello" to the device
+    Wire.write("Hello")
+    // End transmission
+    Wire.endTransmission()
+
+    // Start transmission with device at address 0x51
+    Wire.beginTransmission(0x51)
+    // Send "World" to the device
+    Wire.write("World")
+    // End transmission
+    Wire.endTransmission()
+EndProcedure
+
+// main function
+Procedure main()
+    // Call setup procedure
+    setup()
+
+    // Start main program loop
+    while true do
+        loop()
+    end
+EndProcedure

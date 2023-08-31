@@ -1,0 +1,105 @@
+C.3.3.4. MMME method: Method 2.1
+Create sensor objects: DHT (for temperature and humidity), SCD30 (for CO2), and a pin for VOC sensor reading
+
+Initialize state vector x[4] = {0,0,0,0}
+Initialize covariance matrix P[4][4] = identity matrix
+Set state transition matrix F[4][4] = identity matrix
+Set measurement matrix H[4][4] = identity matrix
+Set measurement noise covariance matrix R[4][4] as given
+Set process noise covariance matrix Q[4][4] = 0.1 * identity matrix
+
+Procedure SETUP:
+    Begin Serial communication
+    Initialize DHT and SCD30 sensors
+    Set measurement interval for SCD30 to 2 seconds
+    Delay 1 second
+
+Procedure LOOP:
+    IF SCD30 has data ready:
+        Read data from SCD30
+        Get sensor readings into sensor_data[4] = {temperature, humidity, CO2, VOC voltage}
+
+        KALMAN FILTER PREDICTION STEP:
+            Predict state vector x_pred = F*x
+            Predict covariance P_pred = F*P*F' + Q
+
+        KALMAN FILTER UPDATE STEP:
+            Calculate innovation y = sensor_data - H*x_pred
+            Calculate innovation covariance S = H*P_pred*H' + R
+            Calculate Kalman gain K = P_pred*H' * inv(S)
+            Update state vector x = x_pred + K*y
+            Update covariance P = P_pred - K*S*K'
+
+        Print estimated vs measured values for temperature, humidity, CO2, and VOC
+
+        Delay 1 second
+
+C.3.3.5. MMME method: Method 2.2
+DEFINE DHTPIN AS 32
+DEFINE DHTTYPE AS DHT22
+
+INITIALIZE DHT as (DHTPIN, DHTTYPE)
+
+DEFINE State transition matrix F AS 4x4 IDENTITY MATRIX
+DEFINE Observation matrix H AS 2x4 MATRIX WITH FIRST TWO DIAGONAL ELEMENTS AS 1
+DEFINE Measurement noise covariance R AS 2x2 MATRIX WITH (1,1) ELEMENT AS 0.0004 AND (2,2) ELEMENT AS 4
+DEFINE Process noise covariance Q AS 4x4 IDENTITY MATRIX
+DEFINE State covariance matrix P AS 4x4 IDENTITY MATRIX
+DEFINE Initial state vector X AS {20, 50, 0, 0}
+
+DEFINE FUNCTION calculateHeatIndex(temp, humidity) {
+    RETURN 0.5 * (temp + 61.0 + ((temp - 68.0) * 1.2) + (0.094 * humidity))
+}
+
+DEFINE FUNCTION calculateDewPoint(temp, humidity) {
+    DEFINE h AS (LOG(humidity / 100) + ((17.625 * temp) / (243.04 + temp))) / (17.625 - LOG(humidity / 100) - (17.625 * temp / (243.04 + temp)))
+    RETURN 243.04 * h
+}
+
+INITIALIZE setup() {
+    START serial communication
+    BEGIN DHT
+}
+
+INITIALIZE loop() {
+    GET temperature and humidity data from DHT22 sensor
+
+    IF humidity OR temp IS NOT A NUMBER THEN
+        PRINT "Failed to read from DHT sensor!"
+        EXIT
+    ENDIF
+
+    CALCULATE heatIndex and dewPoint USING calculateHeatIndex and calculateDewPoint FUNCTIONS
+    UPDATE X[2] and X[3] WITH heatIndex and dewPoint
+
+    // Implement the Kalman filter here
+
+    // prediction for state X
+    PREDICT X_pred FROM X AND P_pred FROM P
+
+    // measurement vector
+    DEFINE Z AS { temp, humidity }
+
+    // Innovation or measurement residual
+    CALCULATE y USING Z, H, AND X_pred
+    
+    // Innovation (or residual) covariance
+    CALCULATE S USING H, P_pred, AND R
+
+    // Optimal Kalman gain
+    CALCULATE K USING S_inv, P_pred, AND H
+
+    // Updated (a posteriori) state estimate
+    UPDATE X USING X_pred, K, AND y
+
+    // Updated (a posteriori) estimate covariance
+    UPDATE P USING K, H, AND P_pred
+
+    // Output results
+    PRINT "Temperature: ", temp
+    PRINT "Humidity: ", humidity
+    PRINT "Heat Index: ", heatIndex
+    PRINT "Dew Point: ", dewPoint
+
+    DELAY by 1 second
+}

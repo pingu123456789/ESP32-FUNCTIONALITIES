@@ -1,0 +1,44 @@
+C.3.4 Other important calculations
+C.3.4.1. CPU time calculation
+unsigned long startTime = millis();
+// Your algorithm here
+unsigned long endTime = millis();
+unsigned long cpuTime = endTime - startTime;
+
+C.3.4.2. Memory usage calculation
+unsigned long memoryBefore = ESP.getFreeHeap();
+// Your algorithm here
+unsigned long memoryAfter = ESP.getFreeHeap();
+unsigned long memoryUsed = memoryBefore - memoryAfter;
+
+C.3.4.3. Check for NAN values
+float low_cost_temperature = readTemperature();
+if (isnan(low_cost_temperature)) {
+  // handle the NaN value
+  // could be replacing it with a reasonable value or skipping this loop iteration
+}
+
+C.3.4.4. Interpolate NAN values
+float interpolateNaNValues(float prev_valid, float next_valid) {
+  return (prev_valid + next_valid) / 2.0;
+}
+
+C.3.4.5.  Outlier detection
+float low_cost_temperature = readTemperature();
+// check if the reading is an outlier
+if (isOutlier(low_cost_temperature)) {
+  // handle the outlier
+  // could be replacing it with a reasonable value or skipping this loop iteration
+}
+
+ C.3.4.6.  Calculate z-score and handle the outlier
+float calculateZScore(float reading, float mean, float std_dev) {
+  return (reading - mean) / std_dev;
+}
+
+float low_cost_temperature = dht.readTemperature();
+// check if the reading is an outlier
+if (isOutlier(low_cost_temperature)) {
+  // handle the outlier
+  // could be replacing it with a reasonable value or skipping this loop iteration
+}

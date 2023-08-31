@@ -1,0 +1,27 @@
+B.2.2.11. Pseudocode for implementing method 1 or method 2 based on user configuration towards refrigeration short cycling detection
+Initialize common variables
+
+Calculate the process mean of the sensor measurements
+
+Select Method 1 or Method 2 based on user choice
+
+if Method 1 selected:
+  Initialize model-specific parameters for Method 1
+  Repeat until change point detected or stopping criteria met:
+    Calculate the instantaneous log-likelihood ratio
+    Update the decision function based on calculated ratio
+    Check conditions for change point detection
+  
+if Method 2 selected:
+  Initialize model-specific parameters for Method 2
+  Repeat until change point detected or stopping criteria met:
+    Calculate the instantaneous log-likelihood ratio
+    Update the decision function based on calculated ratio
+    Update the drift components and the weight parameter
+    Check conditions for change point detection
+    If change point detected:
+      Determine the starting and ending indexes of the change point
+      Implement Recursive Index Shifting for next iteration
+    Else:
+      Continue with the next data point or iteration
+EndIf

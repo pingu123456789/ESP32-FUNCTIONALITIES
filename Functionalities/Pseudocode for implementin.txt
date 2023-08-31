@@ -1,0 +1,30 @@
+B.2.2.8. Pseudocode for implementing method 1, 2 or 3 based on user configuration towards calibration of low-cost sensors
+
+Initialize Q to 0.01     // process noise
+Initialize R to 2        // measurement noise
+Initialize P to Q        // initial estimation error
+Declare X                // initial estimate
+Declare K                // kalman gain
+Declare sensor_values array of size WINDOW_SIZE
+Initialize previous_reference_humidity to 0.0
+
+Create an enumeration named CalibrationMethod with values METHOD_1, METHOD_2, METHOD_3
+
+Procedure setup
+  // Initialization logic here
+EndProcedure
+
+Procedure loop
+  Initialize method to CalibrationMethod.METHOD_1     // Choose the method here
+
+  Switch method
+    Case METHOD_1
+      // Logic for Program 1
+    Case METHOD_2
+      // Logic for Program 2
+    Case METHOD_3
+      // Logic for Program 3
+    Default
+      Print "Invalid method"
+  EndSwitch
+EndProcedure

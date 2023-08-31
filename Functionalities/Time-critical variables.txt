@@ -1,0 +1,5 @@
+B.2.2.2. Time-critical variables
+uint32_t IRAM_ATTR alarm_threshold;
+uint32_t IRAM_ATTR event_counter;
+uint32_t IRAM_ATTR timer_ticks;
+

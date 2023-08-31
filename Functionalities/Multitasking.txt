@@ -1,0 +1,20 @@
+B.2.2.14. Multitasking
+// Declare Task1, Task2, and Task3 procedures
+Procedure Task1(parameters)
+    // Task 1 implementation
+EndProcedure
+
+Procedure Task2(parameters)
+    // Task 2 implementation
+EndProcedure
+
+Procedure Task3(parameters)
+    // Task 3 implementation
+EndProcedure
+
+Procedure setup()
+    // Create tasks pinned to cores with given names, stack size, parameters, priorities, and core numbers
+    xTaskCreatePinnedToCore(Task1, "Task1", 1000, NULL, TASK1_PRIORITY, NULL, 0) // Assign to core 0
+    xTaskCreatePinnedToCore(Task2, "Task2", 1000, NULL, TASK2_PRIORITY, NULL, 1) // Assign to core 1
+    xTaskCreatePinnedToCore(Task3, "Task3", 1000, NULL, TASK3_PRIORITY, NULL, 0) // Assign to core 0
+EndProcedure

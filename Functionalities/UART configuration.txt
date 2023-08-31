@@ -1,0 +1,23 @@
+B.2.2.16. UART configuration
+
+// Initialization procedure
+Procedure setup()
+    // Set serial communication with baud rate 115200 and data format 8N1
+    Serial.begin(115200, SERIAL_8N1)
+EndProcedure
+
+// Main program loop
+Procedure loop()
+    // Place your code here
+    // This code will be continuously run after setup() is complete
+EndProcedure
+
+Procedure main()
+    // Call setup procedure
+    setup()
+
+    // Start main program loop
+    while true do
+        loop()
+    end
+EndProcedure

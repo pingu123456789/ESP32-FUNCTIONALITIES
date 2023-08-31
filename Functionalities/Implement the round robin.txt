@@ -1,0 +1,41 @@
+B.2.2.13. Implement the round robin scheduling
+Define lastTask1Time, lastTask2Time, lastTask3Time as 0
+Define task1Interval, task2Interval, task3Interval // These are the time slices for each task
+
+Procedure setup() // this procedure runs once when the system starts
+    // Initialize task intervals
+    task1Interval = // Set the interval time for Task1
+    task2Interval = // Set the interval time for Task2
+    task3Interval = // Set the interval time for Task3
+EndProcedure
+
+Procedure loop() // this procedure runs repeatedly
+    Define currentMillis as the current time (in milliseconds)
+    
+    If currentMillis - lastTask1Time >= task1Interval
+        Call Task1()
+        lastTask1Time = currentMillis
+    EndIf
+    
+    If currentMillis - lastTask2Time >= task2Interval
+        Call Task2()
+        lastTask2Time = currentMillis
+    EndIf
+    
+    If currentMillis - lastTask3Time >= task3Interval
+        Call Task3()
+        lastTask3Time = currentMillis
+    EndIf
+EndProcedure
+
+Procedure Task1()
+    // Task 1 implementation
+EndProcedure
+
+Procedure Task2()
+    // Task 2 implementation
+EndProcedure
+
+Procedure Task3()
+    // Task 3 implementation
+EndProcedure

@@ -1,0 +1,89 @@
+B.2.2.19. RTC memory
+// define a variable stored in RTC memory
+Define bootCount in RTC memory as 0
+
+// setup function
+Procedure setup()
+    // Increment bootCount by 1
+    bootCount = bootCount + 1
+
+    // Initialize serial communication at 115200 baud rate
+    Serial.begin(115200)
+
+    // Print the boot count to the serial monitor
+    Serial.println("Boot number: " + String(bootCount))
+
+    // Enable timer to wake up after TIME_TO_SLEEP
+    esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * 1e6)
+
+    // Start deep sleep mode
+    esp_deep_sleep_start()
+EndProcedure
+
+// main program loop
+Procedure loop()
+    // No code here because it is not reached due to deep sleep
+EndProcedure
+
+// main function
+Procedure main()
+    // Call setup procedure
+    setup()
+
+    // Not reached, as the chip goes into deep sleep mode in the setup and restarts when awoken
+EndProcedure
+
+An example of RTC memory allocation and retrieval during ULP state of the device
+// Define network credentials
+Define ssid and password as string constants
+
+Initialize sampleID as integer to 0
+
+// Create a Preferences instance called preferences
+
+Procedure setup()
+    // Initialize serial communication at a baud rate of 115200 for debugging
+    Start Serial communication at 115200 baud rate
+
+    // Start Wi-Fi connection using ssid and password
+    Begin Wi-Fi connection with ssid and password
+
+    // Wait until Wi-Fi connection is established
+    While Wi-Fi is not connected
+        Wait for 1 second
+        Print "Connecting to WiFi..." to the serial monitor
+    EndWhile
+EndProcedure
+
+Procedure loop()
+    // Open the Preferences library named "sample_data" in read-only mode
+    Begin preferences library in read-only mode with namespace as "sample_data"
+
+    // Read the last sample ID from the RTC memory
+    Get integer value for "sample_id" from preferences and store it in sampleID
+    Print sampleID to the serial monitor
+
+    // Increase the sampleID by 1
+    Increment sampleID by 1
+
+    // Save the updated sampleID to the RTC memory
+    Store sampleID as "sample_id" in preferences
+
+    // Close the Preferences library
+    End the preferences library
+
+    // Prepare the ESP32 to enter deep sleep
+    Enable timer to wakeup after 60 seconds
+    Print "Going to sleep now" to the serial monitor
+    Start deep sleep
+EndProcedure
+
+Procedure main()
+    // Call setup procedure
+    Call setup()
+
+    // Keep calling loop procedure indefinitely
+    While true
+        Call loop()
+    EndWhile
+EndProcedure

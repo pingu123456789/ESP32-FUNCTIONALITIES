@@ -1,0 +1,4 @@
+B.2.2.3. Interrupt flags
+volatile bool IRAM_ATTR new_data_sample_flag;
+volatile bool IRAM_ATTR comm_request_flag;
+
