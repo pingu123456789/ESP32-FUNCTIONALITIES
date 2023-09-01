@@ -1,0 +1,60 @@
+B.2.2.9. Pseudocode for implementing method 1 or 2 based on user configuration towards single point environmental parameters estimation
+BEGIN
+
+Set constants and global variables: MAX_ITER, TOLERANCE, METHOD, SENSOR_PIN1, SENSOR_PIN2, SENSOR_PIN3, SENSOR_PIN4
+Initialize matrices F, Q, P_prior, P_posterior, H_A, H_B, R_A, R_B, x_prior, x_posterior, z
+Initialize an iteration counter
+
+DEFINE setup
+  Initialize the serial communication
+  Set the sensor pins to input mode
+  IF METHOD is 1, THEN call initializeMethodA()
+  ELSE call initializeMethodB()
+END setup
+
+DEFINE loop
+  Call readSensorData()
+  Call kalmanFilter()
+
+  Increment the iteration counter
+  Compute the norm of the difference between x_prior and x_posterior
+
+  IF the iteration counter has reached MAX_ITER or the norm is less than or equal to TOLERANCE, THEN
+    Process the estimated state parameters as needed
+    Reset the iteration counter
+  END IF
+END loop
+
+DEFINE kalmanFilter
+  Compute the prior state estimate and the prior error covariance matrix
+
+  IF METHOD is 1, THEN
+    Compute the Kalman gain, the posterior state estimate, and the posterior error covariance matrix for Method A
+  ELSE
+    Compute the Kalman gain, the posterior state estimate, and the posterior error covariance matrix for Method B
+  END IF
+END kalmanFilter
+
+DEFINE initializeMethodA
+  Initialize the state estimate and error covariance matrix for Method A
+END initializeMethodA
+
+DEFINE initializeMethodB
+  Initialize the state estimate and error covariance matrix for Method B
+END initializeMethodB
+
+DEFINE readSensorData
+  Read the sensor data and store it in the z matrix
+END readSensorData
+
+DEFINE matrixNorm
+  Compute the norm of a given matrix
+END matrixNorm
+
+DEFINE invertMatrix
+  Compute the inverse of a given matrix
+END invertMatrix
+
+CALL setup and enter an infinite loop by calling loop repeatedly
+
+END
